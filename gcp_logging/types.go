@@ -5,6 +5,10 @@ type Duration struct {
 	Nanos   int `json:"nanos"`
 }
 
+type LogEntry struct {
+	HttpRequest *HttpRequest `json:"httpRequest"`
+}
+
 type HttpRequest struct {
 	RequestMethod                  string    `json:"requestMethod,omitempty"`
 	RequestUrl                     string    `json:"requestUrl,omitempty"`
