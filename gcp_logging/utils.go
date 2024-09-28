@@ -13,12 +13,24 @@ func NewDuration(duration *time.Duration) *Duration {
 	}
 }
 
-func ParseHttpRequest(request *http.Request) (*HttpRequest, error) {
-	return &HttpRequest{
-		RequestMethod: request.Method,
-		UserAgent:     request.UserAgent(),
-		RemoteIp:      request.RemoteAddr,
-		Referer:       request.Referer(),
-		Protocol:      fmt.Sprintf("HTTP/%d.%d", request.ProtoMajor, request.ProtoMinor),
-	}, nil
+func ParseHttp(request *http.Request, response *http.Response) (*HttpRequest, error) {
+	if request == nil && response == nil {
+		return nil, nil
+	}
+
+	var httpRequest HttpRequest
+
+	if request != nil {
+		httpRequest.RequestMethod = request.Method
+		httpRequest.UserAgent = request.UserAgent()
+		httpRequest.RemoteIp = request.RemoteAddr
+		httpRequest.Referer = request.Referer()
+		httpRequest.Protocol = fmt.Sprintf("HTTP/%d.%d", request.ProtoMajor, request.ProtoMinor)
+	}
+
+	if response != nil {
+		httpRequest.Status = response.StatusCode
+	}
+
+	return &httpRequest, nil
 }
