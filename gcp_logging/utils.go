@@ -13,9 +13,9 @@ func NewDuration(duration *time.Duration) *Duration {
 	}
 }
 
-func ParseHttp(request *http.Request, response *http.Response) (*LogEntry, error) {
+func ParseHttp(request *http.Request, response *http.Response) *LogEntry {
 	if request == nil && response == nil {
-		return nil, nil
+		return nil
 	}
 
 	var httpRequest HttpRequest
@@ -32,5 +32,5 @@ func ParseHttp(request *http.Request, response *http.Response) (*LogEntry, error
 		httpRequest.Status = response.StatusCode
 	}
 
-	return &LogEntry{HttpRequest: &httpRequest}, nil
+	return &LogEntry{HttpRequest: &httpRequest}
 }
