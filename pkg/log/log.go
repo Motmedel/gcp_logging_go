@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Motmedel/gcp_logging_go/pkg/gcp_logging"
+	gcpLoggingTypes "github.com/Motmedel/gcp_logging_go/pkg/types"
 	motmedelErrors "github.com/Motmedel/utils_go/pkg/errors"
 	motmedelHttpContext "github.com/Motmedel/utils_go/pkg/http/context"
 	motmedelHttpTypes "github.com/Motmedel/utils_go/pkg/http/types"
@@ -14,8 +15,15 @@ import (
 	"log/slog"
 )
 
+func ParseHttpContext(httpContext *motmedelHttpTypes.HttpContext) *gcpLoggingTypes.LogEntry {
+	if httpContext == nil {
+		return nil
+	}
+
+	return gcp_logging.ParseHttp(httpContext.Request, httpContext.Response)
+}
+
 type HttpContextExtractor struct {
-	SkipTls bool
 }
 
 func (httpContextExtractor *HttpContextExtractor) Handle(ctx context.Context, record *slog.Record) error {
@@ -24,7 +32,7 @@ func (httpContextExtractor *HttpContextExtractor) Handle(ctx context.Context, re
 	}
 
 	if httpContext, ok := ctx.Value(motmedelHttpContext.HttpContextContextKey).(*motmedelHttpTypes.HttpContext); ok && httpContext != nil {
-		if logEntry := gcp_logging.ParseHttp(httpContext.Request, httpContext.Response); logEntry != nil {
+		if logEntry := ParseHttpContext(httpContext); logEntry != nil {
 			logEntryMap, err := motmedelJson.ObjectToMap(logEntry)
 			if err != nil {
 				return motmedelErrors.New(fmt.Errorf("object to map: %w", err), logEntry)

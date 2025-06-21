@@ -2,24 +2,24 @@ package gcp_logging
 
 import (
 	"fmt"
-	"github.com/Motmedel/gcp_logging_go/pkg/types"
+	gcpLoggingTypes "github.com/Motmedel/gcp_logging_go/pkg/types"
 	"net/http"
 	"time"
 )
 
-func NewDuration(duration *time.Duration) *types.Duration {
-	return &types.Duration{
+func NewDuration(duration *time.Duration) *gcpLoggingTypes.Duration {
+	return &gcpLoggingTypes.Duration{
 		Seconds: int(*duration / time.Second),
 		Nanos:   int(*duration % time.Second),
 	}
 }
 
-func ParseHttp(request *http.Request, response *http.Response) *types.LogEntry {
+func ParseHttp(request *http.Request, response *http.Response) *gcpLoggingTypes.LogEntry {
 	if request == nil && response == nil {
 		return nil
 	}
 
-	var httpRequest types.HttpRequest
+	var httpRequest gcpLoggingTypes.HttpRequest
 
 	if request != nil {
 		httpRequest.RequestMethod = request.Method
@@ -33,5 +33,5 @@ func ParseHttp(request *http.Request, response *http.Response) *types.LogEntry {
 		httpRequest.Status = response.StatusCode
 	}
 
-	return &types.LogEntry{HttpRequest: &httpRequest}
+	return &gcpLoggingTypes.LogEntry{HttpRequest: &httpRequest}
 }
