@@ -1,12 +1,8 @@
-package gcp_logging
+package types
 
 type Duration struct {
 	Seconds int `json:"seconds"`
 	Nanos   int `json:"nanos"`
-}
-
-type LogEntry struct {
-	HttpRequest *HttpRequest `json:"httpRequest"`
 }
 
 type HttpRequest struct {
@@ -25,4 +21,8 @@ type HttpRequest struct {
 	CacheValidatedWithOriginServer *bool     `json:"cacheValidatedWithOriginServer,omitempty"`
 	CacheFillBytes                 int       `json:"cacheFillBytes,omitempty"`
 	Protocol                       string    `json:"protocol,omitempty"`
+}
+
+type LogEntry struct {
+	HttpRequest *HttpRequest `json:"httpRequest"`
 }
